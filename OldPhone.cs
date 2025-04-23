@@ -1,11 +1,10 @@
-
-// OldPhone.cs
 using System;
 using System.Text;
 using System.Collections.Generic;
 
 public class OldPhone
 {
+    // Keypad mapping for old phone layout
     private static readonly Dictionary<char, string> keypad = new()
     {
         { '1', "&'(" }, { '2', "ABC" }, { '3', "DEF" },
@@ -14,15 +13,17 @@ public class OldPhone
         { '0', " " }
     };
 
+    /// <summary>
+    /// Converts a sequence of old phone keypad inputs into text.
+    /// Handles pauses (' '), backspaces ('*'), and send ('#').
+    /// </summary>
     public static string OldPhonePad(string input)
     {
-        StringBuilder output = new();
-        StringBuilder currentSequence = new();
+        var output = new StringBuilder();
+        var currentSequence = new StringBuilder();
 
-        for (int i = 0; i < input.Length; i++)
+        foreach (char c in input)
         {
-            char c = input[i];
-
             if (char.IsDigit(c))
             {
                 if (currentSequence.Length > 0 && currentSequence[0] != c)
@@ -39,42 +40,34 @@ public class OldPhone
             }
             else if (c == '*')
             {
+                AppendCharFromSequence(currentSequence, output);
+                currentSequence.Clear();
+
                 if (output.Length > 0)
                     output.Remove(output.Length - 1, 1);
-                currentSequence.Clear();
             }
             else if (c == '#')
             {
                 AppendCharFromSequence(currentSequence, output);
-                break;
+                return output.ToString();
             }
         }
 
+        AppendCharFromSequence(currentSequence, output);
         return output.ToString();
     }
 
+    /// <summary>
+    /// Appends the correct character based on the key press sequence.
+    /// </summary>
     private static void AppendCharFromSequence(StringBuilder seq, StringBuilder output)
     {
         if (seq.Length == 0) return;
 
-        char key = seq[0];
-        if (!keypad.ContainsKey(key)) return;
-
-        string letters = keypad[key];
-        int index = (seq.Length - 1) % letters.Length;
-
-        output.Append(letters[index]);
-    }
-}
-
-// Sample usage:
-class Program
-{
-    static void Main()
-    {
-        Console.WriteLine(OldPhone.OldPhonePad("33#"));                // E
-        Console.WriteLine(OldPhone.OldPhonePad("227*#"));              // B
-        Console.WriteLine(OldPhone.OldPhonePad("4433555 555666#"));    // HELLO
-        Console.WriteLine(OldPhone.OldPhonePad("8 88777444666*664#")); // TEST
+        if (keypad.TryGetValue(seq[0], out string letters))
+        {
+            int index = (seq.Length - 1) % letters.Length;
+            output.Append(letters[index]);
+        }
     }
 }
