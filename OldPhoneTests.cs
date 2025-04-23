@@ -1,4 +1,3 @@
-
 // OldPhoneTests.cs
 using Xunit;
 
@@ -25,7 +24,7 @@ public class OldPhoneTests
     [Fact]
     public void BackspaceMidway_ModifiesMessageCorrectly()
     {
-        Assert.Equal("TEST", OldPhone.OldPhonePad("8 88777444666*664#"));
+        Assert.Equal("TURING", OldPhone.OldPhonePad("8 88777444666*664#"));
     }
 
     [Fact]
