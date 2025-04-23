@@ -1,4 +1,3 @@
-
 # OldPhonePad - C# Coding Challenge
 
 ## Overview
@@ -29,7 +28,7 @@ The program iterates through the input string character by character. It groups 
 ```csharp
 OldPhonePad("33#") => "E"
 OldPhonePad("227*#") => "B"
-OldPhonePad("8 88777444666*664#") => "TEST"
+OldPhonePad("8 88777444666*664#") => "TURING"
 ```
 
 ## File Structure
